@@ -4,16 +4,19 @@ const eduSchema = new Schema(
     {
         education: {
             type: String,
-            required: true
+            default: ""
         },
         school: {
             type: String,
+            default: ""
         },
         startdate: {
             type: Date,
+            default: ""
         },
         enddate: {
             type: Date,
+            default: ""
         },
         description: {
             type: String,
@@ -25,15 +28,19 @@ const empSchema = new Schema(
     {
         position: {
             type: String,
+            default: ""
         },
         company: {
             type: String,
+            default: ""
         },
         startdate: {
             type: Date,
+            default: ""
         },
         enddate: {
             type: Date,
+            default: ""
         },
         description: {
             type: String,
@@ -45,9 +52,11 @@ const skillSchema = new Schema(
     {
         skill: {
             type: String,
+            default: ""
         },
         status: {
             type: String,
+            default: ""
         },
     }
 )
@@ -55,9 +64,11 @@ const languageScehma = new Schema(
     {
         language: {
             type: String,
+            default: ""
         },
         level: {
             type: String,
+            default: ""
         },
     }
 )
@@ -85,7 +96,8 @@ const resumeSchema = new Schema(
         },
         gender: {
             type: String,
-            enum: ['Male', 'Female']
+            enum: ['Male', 'Female'],
+            default: "Male"
         },
         nationality: {
             type: String,
@@ -103,9 +115,12 @@ const resumeSchema = new Schema(
         employment: [ empSchema ],
         skills: [ skillSchema ],
         languages: [ languageScehma ],
-        profie: {
+        profile: {
             type: String,
             default: ""
+        },
+        deleted_at: {
+            type: Date
         },
     },
     {
