@@ -4,7 +4,7 @@ const eduSchema = new Schema(
     {
         education: {
             type: String,
-            default: ""
+            required: true,
         },
         school: {
             type: String,
@@ -52,11 +52,11 @@ const skillSchema = new Schema(
     {
         skill: {
             type: String,
-            default: ""
+            required: true,
         },
         status: {
             type: String,
-            default: ""
+            default: "Normal"
         },
     }
 )
@@ -64,11 +64,11 @@ const languageScehma = new Schema(
     {
         language: {
             type: String,
-            default: ""
+            required: true,
         },
         level: {
             type: String,
-            default: ""
+            default: "Normal"
         },
     }
 )
@@ -84,15 +84,15 @@ const resumeSchema = new Schema(
         },
         phone: {
             type: String,
-            default: ""
+            required: true,
         },
         address: {
             type: String,
-            default: ""
+            required: true,
         },
         dob: {
             type: Date,
-            default: ""
+            required: true,
         },
         gender: {
             type: String,
@@ -101,11 +101,11 @@ const resumeSchema = new Schema(
         },
         nationality: {
             type: String,
-            default: ""
+            required: true,
         },
         religion: {
             type: String,
-            default: ""
+            required: true,
         },
         description: {
             type: String,
@@ -117,7 +117,7 @@ const resumeSchema = new Schema(
         languages: [ languageScehma ],
         profile: {
             type: String,
-            default: ""
+            required: true,
         },
         deleted_at: {
             type: Date

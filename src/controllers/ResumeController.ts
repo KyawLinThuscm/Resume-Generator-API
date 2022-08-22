@@ -4,7 +4,8 @@ import {
     createResumeService,
     findResumeService,
     updateResumeService,
-    deleteResumeService
+    deleteResumeService,
+    searchResumeService
 } from '../services/ResumeService'
 
 export const getResume = async (
@@ -46,3 +47,11 @@ export const getResume = async (
   ) => {
     deleteResumeService(req, res, next);
   };
+
+  export const searchResume = async (
+    req: any,
+    res: Response,
+    next: NextFunction
+  ) => {
+    searchResumeService(req, res, next);
+  }

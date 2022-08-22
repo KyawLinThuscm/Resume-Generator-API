@@ -12,13 +12,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteResumeService = exports.updateResumeService = exports.findResumeService = exports.createResumeService = exports.getResumeService = void 0;
+exports.searchResumeService = exports.deleteResumeService = exports.updateResumeService = exports.findResumeService = exports.createResumeService = exports.getResumeService = void 0;
 const Resume_1 = __importDefault(require("../models/Resume"));
 const utils_1 = require("../utils");
-const getResumeService = (_req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
+const moment_1 = __importDefault(require("moment"));
+const express_validator_1 = require("express-validator");
+const getResumeService = (req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const page = req.query.page || 0;
+        const resumePerPage = req.query.rpp || 3;
         let condition = { deleted_at: null };
-        const resume = yield Resume_1.default.find(condition);
+        const resume = yield Resume_1.default.find(condition).skip(page * resumePerPage).limit(resumePerPage);
         res.json({ data: resume, status: 1 });
     }
     catch (err) {
@@ -55,15 +59,18 @@ const createResumeService = (req, res, _next) => __awaiter(void 0, void 0, void 
             .json({ message: "Created Successfully!", data: result, status: 1 });
     }
     catch (err) {
-        res
-            .status(404)
-            .json({ message: "Created Failed!" });
+        res.send("An error occured");
     }
 });
 exports.createResumeService = createResumeService;
 const findResumeService = (req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const resume = yield Resume_1.default.findById(req.params.id);
+        if (!resume) {
+            const error = Error("Not Found!");
+            error.statusCode = 404;
+            throw error;
+        }
         res.json({ data: resume, status: 1 });
     }
     catch (err) {
@@ -73,6 +80,13 @@ const findResumeService = (req, res, _next) => __awaiter(void 0, void 0, void 0,
 exports.findResumeService = findResumeService;
 const updateResumeService = (req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const errors = (0, express_validator_1.validationResult)(req.body);
+        if (!errors.isEmpty()) {
+            const error = new Error("Validation failed!");
+            error.data = errors.array();
+            error.statusCode = 422;
+            throw error;
+        }
         const resume = yield Resume_1.default.findById(req.params.id);
         if (!resume) {
             const error = new Error("Not Found!");
@@ -127,4 +141,26 @@ const deleteResumeService = (req, res, _next) => __awaiter(void 0, void 0, void 
     }
 });
 exports.deleteResumeService = deleteResumeService;
+const searchResumeService = (req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
+    try {
+        const page = req.query.page || 0;
+        const resumePerPage = req.query.rpp || 3;
+        let condition = { deleted_at: null };
+        let fromDate = ((_a = req.body) === null || _a === void 0 ? void 0 : _a.fromDate) ? new Date(req.body.fromDate) : null;
+        let toDate = ((_b = req.body) === null || _b === void 0 ? void 0 : _b.toDate) ? new Date(req.body.toDate) : null;
+        ((_c = req.body) === null || _c === void 0 ? void 0 : _c.rname) ? condition.name = { '$regex': req.body.rname, '$options': 'i' } : '';
+        ((_d = req.body) === null || _d === void 0 ? void 0 : _d.fromDate) && ((_e = req.body) === null || _e === void 0 ? void 0 : _e.toDate) ? condition.createdAt = { $gte: fromDate, $lte: toDate } : '';
+        ((_f = req.body) === null || _f === void 0 ? void 0 : _f.fromDate) && !((_g = req.body) === null || _g === void 0 ? void 0 : _g.toDate) ? condition.createdAt = { $gte: fromDate, $lte: new Date() } : '';
+        ((_h = req.body) === null || _h === void 0 ? void 0 : _h.toDate) && !((_j = req.body) === null || _j === void 0 ? void 0 : _j.fromDate) ? condition.createdAt = { $lte: toDate } : '';
+        ((_k = req.body) === null || _k === void 0 ? void 0 : _k.fromDate) && ((_l = req.body) === null || _l === void 0 ? void 0 : _l.toDate) && ((_m = req.body) === null || _m === void 0 ? void 0 : _m.fromDate) === ((_o = req.body) === null || _o === void 0 ? void 0 : _o.toDate) ?
+            condition.createdAt = { $gte: (0, moment_1.default)(fromDate), $lte: (0, moment_1.default)(toDate).add(1, 'days') } : '';
+        const resume = yield Resume_1.default.find(condition).skip(page * resumePerPage).limit(resumePerPage);
+        res.json({ data: resume, status: 1 });
+    }
+    catch (err) {
+        res.send("An error occured");
+    }
+});
+exports.searchResumeService = searchResumeService;
 //# sourceMappingURL=ResumeService.js.map

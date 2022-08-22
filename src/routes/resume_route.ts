@@ -1,5 +1,5 @@
 import express from 'express';
-import { createResume, findResume, getResume, updateResume, deleteResume } from '../controllers/ResumeController';
+import { createResume, findResume, getResume, updateResume, deleteResume, searchResume } from '../controllers/ResumeController';
 
 const router = express.Router();
 
@@ -14,4 +14,8 @@ router
     .get(findResume)
     .put(updateResume)
     .delete(deleteResume)
+
+router
+    .route("/search")
+    .post(searchResume)
 export default router;

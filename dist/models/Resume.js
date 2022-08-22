@@ -4,7 +4,7 @@ const mongoose_1 = require("mongoose");
 const eduSchema = new mongoose_1.Schema({
     education: {
         type: String,
-        default: ""
+        required: true,
     },
     school: {
         type: String,
@@ -48,21 +48,21 @@ const empSchema = new mongoose_1.Schema({
 const skillSchema = new mongoose_1.Schema({
     skill: {
         type: String,
-        default: ""
+        required: true,
     },
     status: {
         type: String,
-        default: ""
+        default: "Normal"
     },
 });
 const languageScehma = new mongoose_1.Schema({
     language: {
         type: String,
-        default: ""
+        required: true,
     },
     level: {
         type: String,
-        default: ""
+        default: "Normal"
     },
 });
 const resumeSchema = new mongoose_1.Schema({
@@ -76,15 +76,15 @@ const resumeSchema = new mongoose_1.Schema({
     },
     phone: {
         type: String,
-        default: ""
+        required: true,
     },
     address: {
         type: String,
-        default: ""
+        required: true,
     },
     dob: {
         type: Date,
-        default: ""
+        required: true,
     },
     gender: {
         type: String,
@@ -93,11 +93,11 @@ const resumeSchema = new mongoose_1.Schema({
     },
     nationality: {
         type: String,
-        default: ""
+        required: true,
     },
     religion: {
         type: String,
-        default: ""
+        required: true,
     },
     description: {
         type: String,
@@ -109,7 +109,7 @@ const resumeSchema = new mongoose_1.Schema({
     languages: [languageScehma],
     profile: {
         type: String,
-        default: ""
+        required: true,
     },
     deleted_at: {
         type: Date

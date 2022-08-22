@@ -15,5 +15,8 @@ router
     .get(ResumeController_1.findResume)
     .put(ResumeController_1.updateResume)
     .delete(ResumeController_1.deleteResume);
+router
+    .route("/search")
+    .post(ResumeController_1.searchResume);
 exports.default = router;
 //# sourceMappingURL=resume_route.js.map

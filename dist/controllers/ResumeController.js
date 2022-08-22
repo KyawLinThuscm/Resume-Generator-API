@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteResume = exports.updateResume = exports.findResume = exports.createResume = exports.getResume = void 0;
+exports.searchResume = exports.deleteResume = exports.updateResume = exports.findResume = exports.createResume = exports.getResume = void 0;
 const ResumeService_1 = require("../services/ResumeService");
 const getResume = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     (0, ResumeService_1.getResumeService)(req, res, next);
@@ -31,4 +31,8 @@ const deleteResume = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
     (0, ResumeService_1.deleteResumeService)(req, res, next);
 });
 exports.deleteResume = deleteResume;
+const searchResume = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    (0, ResumeService_1.searchResumeService)(req, res, next);
+});
+exports.searchResume = searchResume;
 //# sourceMappingURL=ResumeController.js.map
