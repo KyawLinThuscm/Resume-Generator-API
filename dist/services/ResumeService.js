@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteResumeService = exports.updateResumeService = exports.findResumeService = exports.createResumeService = exports.getResumeService = void 0;
 const Resume_1 = __importDefault(require("../models/Resume"));
+const utils_1 = require("../utils");
 const getResumeService = (_req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let condition = { deleted_at: null };
@@ -27,6 +28,10 @@ const getResumeService = (_req, res, _next) => __awaiter(void 0, void 0, void 0,
 exports.getResumeService = getResumeService;
 const createResumeService = (req, res, _next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        let profile = req.body.profile;
+        if (req.file) {
+            profile = req.file.path.replace("\\", "/");
+        }
         const resumeForm = {
             name: req.body.name,
             email: req.body.email,
@@ -41,7 +46,7 @@ const createResumeService = (req, res, _next) => __awaiter(void 0, void 0, void 
             employment: req.body.employment,
             skills: req.body.skills,
             languages: req.body.languages,
-            profile: req.body.profile
+            profile: profile
         };
         const resume = new Resume_1.default(resumeForm);
         const result = yield resume.save();
@@ -74,6 +79,16 @@ const updateResumeService = (req, res, _next) => __awaiter(void 0, void 0, void 
             error.statusCode = 404;
             throw error;
         }
+        let profile = req.body.profile;
+        if (req.file) {
+            profile = req.file.path.replace("\\", "/");
+            if (resume.profile && resume.profile != profile) {
+                (0, utils_1.deleteFile)(resume.profile);
+            }
+            if (profile) {
+                resume.profile = profile;
+            }
+        }
         resume.name = req.body.name;
         resume.email = req.body.email;
         resume.phone = req.body.phone;
@@ -87,7 +102,6 @@ const updateResumeService = (req, res, _next) => __awaiter(void 0, void 0, void 
         resume.employment = req.body.employment;
         resume.skills = req.body.skills;
         resume.languages = req.body.languages;
-        resume.profile = req.body.profile;
         const result = yield resume.save();
         res.json({ message: "Updated Successfully!", data: result, status: 1 });
     }

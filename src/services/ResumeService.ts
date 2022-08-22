@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import Resume from '../models/Resume';
 import { ResumeCreate } from '../interfaces/ResumeInterface';
+import { deleteFile } from "../utils";
 
 export const getResumeService = async (
     _req: Request,
@@ -22,6 +23,10 @@ export const createResumeService = async (
     _next: NextFunction
 ) => {
     try {
+        let profile: string = req.body.profile;
+        if (req.file) {
+        profile = req.file.path.replace("\\", "/");
+        }
         const resumeForm: ResumeCreate = {
             name: req.body.name,
             email: req.body.email,
@@ -36,7 +41,7 @@ export const createResumeService = async (
             employment: req.body.employment,
             skills: req.body.skills,
             languages: req.body.languages,
-            profile: req.body.profile
+            profile: profile
         }
         const resume = new Resume(resumeForm);
         const result = await resume.save();
@@ -76,6 +81,16 @@ export const updateResumeService = async (
             error.statusCode = 404;
             throw error;
         }
+        let profile: string = req.body.profile;
+        if (req.file) {
+        profile = req.file.path.replace("\\", "/");
+        if (resume.profile && resume.profile != profile) {
+            deleteFile(resume.profile);
+        }
+        if (profile) {
+            resume.profile = profile;
+        }
+        }
         resume.name = req.body.name;
         resume.email = req.body.email;
         resume.phone = req.body.phone;
@@ -89,7 +104,6 @@ export const updateResumeService = async (
         resume.employment = req.body.employment;
         resume.skills = req.body.skills;
         resume.languages = req.body.languages;
-        resume.profile= req.body.profile;
         const result = await resume.save();
         res.json({ message: "Updated Successfully!", data: result, status: 1 });
     } catch (err) {

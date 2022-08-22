@@ -2,14 +2,14 @@ export interface Education {
     education: string;
     school: string;
     startdate: string;
-    endate: string;
+    enddate: string;
     description: string;
 }
 export interface Employment {
     position: string;
     company: string;
     startdate: string;
-    endate: string;
+    enddate: string;
     description: string;
 }
 export interface Skills {
