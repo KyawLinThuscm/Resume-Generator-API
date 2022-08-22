@@ -1,0 +1,2 @@
+PORT = 5000
+DATABASE = mongodb+srv://scmkyawlinnthu:scmklt123@cluster0.rzvkbpi.mongodb.net/ResumeBuilder?retryWrites=true&w=majority
