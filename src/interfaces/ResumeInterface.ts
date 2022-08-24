@@ -14,13 +14,13 @@ export interface Employment {
 }
 export interface Skills {
     skill: string;
-    status: string;
+    level: string;
 }
 export interface Languages {
     language: string;
     level: string;
 }
-export interface ResumeCreate {
+ export interface Personal {
     name: string,
     email: string,
     phone: string,
@@ -30,6 +30,9 @@ export interface ResumeCreate {
     nationality: string,
     religion: string,
     description: string,
+}
+export interface ResumeCreate {
+    personal: Personal,
     education: [ Education ],
     employment: [ Employment ],
     skills: [Skills],

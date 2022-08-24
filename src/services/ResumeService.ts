@@ -12,7 +12,7 @@ export const getResumeService = async (
 ) => {
     try {
         const page: any = req.query.page || 0;
-        const resumePerPage: any = req.query.rpp || 3;
+        const resumePerPage: any = req.query.rpp || 5;
 
         let condition: any = { deleted_at: null };
         const resume = await Resume.find(condition).skip(page * resumePerPage).limit(resumePerPage);
@@ -25,37 +25,31 @@ export const getResumeService = async (
 export const createResumeService = async (
     req: any,
     res: Response,
-    _next: NextFunction
+    next: NextFunction
 ) => {
     try {
         let profile: string = req.body.profile;
         if (req.file) {
             profile = req.file.path.replace("\\", "/");
         }
+
         const resumeForm: ResumeCreate = {
-            name: req.body.name,
-            email: req.body.email,
-            phone: req.body.phone,
-            address: req.body.address,
-            dob: req.body.dob,
-            gender: req.body.gender,
-            nationality: req.body.nationality,
-            religion: req.body.religion,
-            description: req.body.description,
-            education: req.body.education,
-            employment: req.body.employment,
-            skills: req.body.skills,
-            languages: req.body.languages,
+            personal: JSON.parse(req.body.personal),
+            education: JSON.parse(req.body?.education) ||  [],
+            employment: JSON.parse(req.body?.employment) || [],
+            skills: JSON.parse(req.body?.skills) || [],
+            languages: JSON.parse(req.body?.languages) || [],
             profile: profile
         }
         const resume = new Resume(resumeForm);
         const result = await resume.save();
         res
             .status(201)
-            .json({ message: "Created Successfully!", data: result, status: 1 });
+            .json({ message: "Created Successfully!", data:result, status: 1 });
 
     } catch (err) {
-        res.send("An error occured");
+        // res.send("An error occured");
+        next(err);
     }
 };
 
@@ -106,15 +100,7 @@ export const updateResumeService = async (
             resume.profile = profile;
         }
         }
-        resume.name = req.body.name;
-        resume.email = req.body.email;
-        resume.phone = req.body.phone;
-        resume.address = req.body.address;
-        resume.dob = req.body.dob;
-        resume.gender = req.body.gender;
-        resume.nationality = req.body.nationality;
-        resume.religion = req.body.religion;
-        resume.description = req.body.description;
+        resume.personal = req.body.personal;
         resume.education = req.body.education;
         resume.employment = req.body.employment;
         resume.skills = req.body.skills;

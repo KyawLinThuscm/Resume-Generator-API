@@ -4,7 +4,7 @@ const eduSchema = new Schema(
     {
         education: {
             type: String,
-            required: true,
+            // required: true,
         },
         school: {
             type: String,
@@ -44,7 +44,7 @@ const empSchema = new Schema(
         },
         description: {
             type: String,
-            default: ""
+            // default: ""
         },
     }
 )
@@ -52,9 +52,9 @@ const skillSchema = new Schema(
     {
         skill: {
             type: String,
-            required: true,
+            // required: true,
         },
-        status: {
+        level: {
             type: String,
             default: "Normal"
         },
@@ -64,7 +64,7 @@ const languageScehma = new Schema(
     {
         language: {
             type: String,
-            required: true,
+            // required: true,
         },
         level: {
             type: String,
@@ -72,27 +72,28 @@ const languageScehma = new Schema(
         },
     }
 )
-const resumeSchema = new Schema(
-    {
+
+const personalSchema = new Schema(
+    { 
         name: {
             type: String,
-            required: true
+            // required: true,
         },
         email: {
             type: String,
-            required: true,
+            // required: true,
         },
         phone: {
             type: String,
-            required: true,
+            // required: true,
         },
         address: {
             type: String,
-            required: true,
+            // required: true,
         },
         dob: {
             type: Date,
-            required: true,
+            // required: true,
         },
         gender: {
             type: String,
@@ -101,16 +102,21 @@ const resumeSchema = new Schema(
         },
         nationality: {
             type: String,
-            required: true,
+            // required: true,
         },
         religion: {
             type: String,
-            required: true,
+            // required: true,
         },
         description: {
             type: String,
             default: ""
-        },
+        }
+    }  
+)
+const resumeSchema = new Schema(
+    {
+        personal: personalSchema,
         education: [ eduSchema ],
         employment: [ empSchema ],
         skills: [ skillSchema ],
