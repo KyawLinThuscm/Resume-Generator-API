@@ -92,19 +92,19 @@ export const updateResumeService = async (
         }
         let profile: string = req.body.profile;
         if (req.file) {
-        profile = req.file.path.replace("\\", "/");
-        if (resume.profile && resume.profile != profile) {
-            deleteFile(resume.profile);
+            profile = req.file.path.replace("\\", "/");
+            if (resume.profile && resume.profile != profile) {
+                deleteFile(resume.profile);
+            }
+            if (profile) {
+                resume.profile = profile;
+            }
         }
-        if (profile) {
-            resume.profile = profile;
-        }
-        }
-        resume.personal = req.body.personal;
-        resume.education = req.body.education;
-        resume.employment = req.body.employment;
-        resume.skills = req.body.skills;
-        resume.languages = req.body.languages;
+        resume.personal = JSON.parse(req.body.personal);
+        resume.education = JSON.parse(req.body?.education) ||  [];
+        resume.employment = JSON.parse(req.body?.employment) || [];
+        resume.skills = JSON.parse(req.body?.skills) || [];
+        resume.languages = JSON.parse(req.body?.languages) || [];
         const result = await resume.save();
         res.json({ message: "Updated Successfully!", data: result, status: 1 });
     } catch (err) {
