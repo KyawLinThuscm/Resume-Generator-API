@@ -133,7 +133,7 @@ export const deleteResumeService = async (
 };
 
 export const searchResumeService = async (
-    req: Request,
+    req: any,
     res: Response,
     _next: NextFunction
 ) => {
@@ -142,18 +142,21 @@ export const searchResumeService = async (
         const resumePerPage: any = req.query.rpp || 3;
         let condition: any = { deleted_at: null };
 
+        req.body?.name ? condition = { 'personal.name' : { '$regex': req.body.name, '$options': 'i' }, deleted_at: null } : '';
         let fromDate = req.body?.fromDate ? new Date(req.body.fromDate) : null;
         let toDate = req.body?.toDate ? new Date(req.body.toDate) : null;
-        req.body?.rname ? condition.name = { '$regex': req.body.rname, '$options': 'i' } : '';
+        
         req.body?.fromDate && req.body?.toDate ? condition.createdAt = { $gte: fromDate, $lte: toDate } : '';
         req.body?.fromDate && !req.body?.toDate ? condition.createdAt = { $gte: fromDate, $lte: new Date() } : '';
         req.body?.toDate && !req.body?.fromDate ? condition.createdAt = { $lte: toDate } : '';
         req.body?.fromDate && req.body?.toDate && req.body?.fromDate === req.body?.toDate ?
         condition.createdAt = { $gte: moment(fromDate), $lte: moment(toDate).add(1, 'days') } : '';
 
+        console.log(condition)
         const resume = await Resume.find(condition).skip(page * resumePerPage).limit(resumePerPage);
         res.json({ data: resume, status: 1 });
     } catch (err) {
+        // next(err);
         res.send("An error occured");
     }
 };
