@@ -146,6 +146,7 @@ export const searchResumeService = async (
         let fromDate = req.body?.fromDate ? new Date(req.body.fromDate) : null;
         let toDate = req.body?.toDate ? new Date(req.body.toDate) : null;
         
+        !req.body?.name && !req.body?.fromDate && !req.body?.toDate ? condition : '';
         req.body?.fromDate && req.body?.toDate ? condition.createdAt = { $gte: fromDate, $lte: toDate } : '';
         req.body?.fromDate && !req.body?.toDate ? condition.createdAt = { $gte: fromDate, $lte: new Date() } : '';
         req.body?.toDate && !req.body?.fromDate ? condition.createdAt = { $lte: toDate } : '';
