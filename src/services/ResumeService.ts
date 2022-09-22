@@ -12,11 +12,13 @@ export const getResumeService = async (
 ) => {
     try {
         const page: any = req.query.page || 0;
-        const resumePerPage: any = req.query.rpp || 5;
+        const resumePerPage: any = req.query.rpp || 2;
 
         let condition: any = { deleted_at: null };
         const resume = await Resume.find(condition).skip(page * resumePerPage).limit(resumePerPage);
-        res.json({ data: resume, status: 1 });
+        const totalSize = await Resume.countDocuments(condition);
+
+        res.json({ data: resume, totalSize: totalSize, status: 1 });
     } catch (err) {
         res.send("An error occured");
     }
@@ -153,9 +155,9 @@ export const searchResumeService = async (
         req.body?.fromDate && req.body?.toDate && req.body?.fromDate === req.body?.toDate ?
         condition.createdAt = { $gte: moment(fromDate), $lte: moment(toDate).add(1, 'days') } : '';
 
-        console.log(condition)
         const resume = await Resume.find(condition).skip(page * resumePerPage).limit(resumePerPage);
-        res.json({ data: resume, status: 1 });
+        const totalSize = await Resume.countDocuments(condition);
+        res.json({ data: resume, totalSize: totalSize, status: 1 });
     } catch (err) {
         // next(err);
         res.send("An error occured");

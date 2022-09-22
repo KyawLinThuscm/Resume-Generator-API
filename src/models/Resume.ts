@@ -133,4 +133,5 @@ const resumeSchema = new Schema(
         timestamps: true
     }
 )
+
 export default model("resume", resumeSchema)
